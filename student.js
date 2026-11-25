@@ -11,8 +11,9 @@ function model(state,lifeState){
  const path=['pc','phone','all'].includes(state.path)?state.path:'all';
  const selected=lessons.filter(l=>path==='all'||l.module===path||['safe','gov','final'].includes(l.module));
  const count=selected.filter(l=>completed.has(l.id)).length;
- const next=selected.find(l=>!completed.has(l.id));
- const stage=next?(practiced.has(next.id)?'quiz':'theory'):'theory';
+ const last=selected.find(l=>l.id===state.last?.id&&!completed.has(l.id));
+ const next=last||selected.find(l=>!completed.has(l.id));
+ const stage=last&&['theory','practice','quiz'].includes(state.last.stage)?state.last.stage:next&&practiced.has(next.id)?'quiz':'theory';
  return {completed,practiced,passed,doneLife,path,selected,count,next,stage};
 }
 function render(state,storageOK){

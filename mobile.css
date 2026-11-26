@@ -109,3 +109,69 @@ body.mobile-shell{display:block;min-width:0;width:100%;padding-bottom:calc(76px 
 
 .mobile-cell-value{display:contents}
 @media screen and (max-width:760px){.mobile-shell .mobile-cell-value{display:block}.large .mobile-shell .choices button,.large .mobile-shell .life-option{font-size:1rem}.large .mobile-shell h1{font-size:1.7rem}.large .mobile-shell h2{font-size:1.3rem}.large .mobile-shell .mobile-nav a,.large .mobile-shell .mobile-nav button{font-size:11px}}
+
+/* Education: mobile-first dashboard and compact cabinet switch. */
+.mobile-cabinet-switch,.mobile-welcome,.mobile-quick{display:none}
+@media screen and (max-width:760px){
+.mobile-education header{min-height:54px;padding:5px 12px;box-shadow:none}
+.mobile-education .brand-foxes .brand-logo{width:38px;height:36px;max-width:38px}
+.mobile-education .brand-foxes>strong{font-size:16px}
+.mobile-education #font{font-size:12px;min-height:40px;padding:6px 9px}
+.mobile-education main{padding:12px 12px 24px}
+.mobile-education .ws-demo-strip,.mobile-education .ws-role-nav{display:none}
+.mobile-education .mobile-cabinet-switch{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px;color:#52667e;font-size:11px;line-height:1.35}
+.mobile-cabinet-switch>span{max-width:45%}
+.mobile-cabinet-switch details{position:relative;max-width:60%;min-width:0}
+.mobile-cabinet-switch summary{display:flex;align-items:center;justify-content:space-between;gap:7px;min-height:40px;padding:8px 10px;border:1px solid #dce5f1;border-radius:10px;background:white;color:#2459d6;font-weight:650;cursor:pointer;font-size:13px;list-style:none}
+.mobile-cabinet-switch summary::-webkit-details-marker{display:none}
+.mobile-cabinet-options{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:min(255px,85vw);padding:6px;background:white;box-shadow:0 8px 30px #182b4526;border:1px solid #dce5f1;border-radius:12px}
+.mobile-cabinet-options a{display:flex;align-items:center;gap:10px;min-height:44px;padding:9px 10px;text-decoration:none;color:#203a5c;font-size:14px;border-radius:8px}
+.mobile-cabinet-options a[aria-current=page]{background:#eaf1ff;color:#2459d6}
+.mobile-cabinet-options svg{width:20px;height:20px;flex:none}
+.mobile-education .mobile-welcome{position:relative;display:flex;align-items:center;gap:8px;padding:18px 15px;background:#e9f1ff;border:1px solid #d5e3ff;border-radius:17px;margin-bottom:19px}
+.mobile-welcome-copy{flex:1;min-width:0}
+.mobile-welcome-copy>span{font-size:9px;letter-spacing:.07em;color:#315d9e;font-weight:700}
+.mobile-education .mobile-welcome h1{font-size:25px;line-height:1.12;margin:8px 0;letter-spacing:-.6px}
+.mobile-welcome p{font-size:14px;line-height:1.4;margin:8px 0 12px;color:#405a7b}
+.mobile-welcome img{width:72px;height:auto;object-fit:contain;background:white;border-radius:10px;padding:5px;align-self:flex-start;flex-shrink:0}
+.mobile-welcome .btn{font-size:13px;padding:10px 12px;min-height:44px}
+.mobile-education .mobile-quick{display:block;margin-bottom:19px}
+.mobile-quick h2{font-size:18px;margin:0 0 10px}
+.mobile-quick>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.mobile-quick a{display:flex;align-items:center;gap:8px;padding:11px 9px;min-height:65px;background:white;border:1px solid #dce5f1;border-radius:12px;text-decoration:none;color:#203a5c}
+.mobile-quick .ws-icon{width:34px;height:34px;border-radius:9px}
+.mobile-quick .ws-icon svg{width:19px;height:19px}
+.mobile-quick b{font-size:13px;line-height:1.25;overflow-wrap:normal}
+.mobile-education .mobile-welcome~.ws-demo-hero{display:none}
+.mobile-education .mobile-demo-metrics{margin:12px 0 20px;gap:8px}
+.mobile-education .mobile-demo-metrics .ws-metric{padding:10px 12px;gap:3px}
+.mobile-education .mobile-demo-metrics .ws-metric strong{font-size:24px}
+.mobile-education .mobile-demo-metrics .ws-metric>span{font-size:12px;line-height:1.3}
+.mobile-education .ad-directions .ws-section-title{gap:5px;margin:16px 0 9px}
+.mobile-education .ad-directions .ws-section-title h2{font-size:19px}
+.mobile-education .ad-directions>p{font-size:14px;line-height:1.45;margin-bottom:12px}
+.mobile-education .ad-direction-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 18px}
+.mobile-education .ad-direction-card{padding:12px 10px;gap:7px}
+.mobile-education .ad-direction-card h3{font-size:14px;margin:0}
+.mobile-education .ad-direction-card p{font-size:12px;line-height:1.35;margin:0}
+.mobile-education .ad-direction-card>span:last-child{font-size:11px;line-height:1.3}
+.mobile-education .ad-direction-card .ws-icon{width:34px;height:34px}
+.mobile-education .ws-heading h1{font-size:26px;margin:7px 0 9px}
+.mobile-education .ws-heading p{font-size:14px;line-height:1.5}
+.mobile-education .ws-heading .kicker{font-size:10px}
+.mobile-education .ws-next{padding:16px}
+.mobile-education .ws-next h2{font-size:21px;margin:12px 0}
+.mobile-education .ws-person-card{padding:15px;gap:10px;grid-template-columns:44px minmax(0,1fr)}
+.mobile-education .ws-avatar{width:44px;height:44px;font-size:20px}
+.mobile-education .ws-walk-card h3{font-size:15px}
+.mobile-education .ws-walk-card p{font-size:13px;line-height:1.4}
+.mobile-education .ws-walk-card{padding:12px}
+.mobile-education .mobile-nav a,.mobile-education .mobile-nav button{min-height:52px}
+.mobile-education .mobile-nav{padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom,0px))}
+.mobile-education footer{font-size:12px}
+.large .mobile-education .mobile-welcome h1{font-size:1.5rem}
+.large .mobile-education .mobile-welcome p,.large .mobile-education .ws-heading p,.large .mobile-education .ad-direction-card p,.large .mobile-education .ws-walk-card p{font-size:1rem}
+.large .mobile-education .mobile-quick b,.large .mobile-education .ad-direction-card h3{font-size:.9rem}
+.large .mobile-education .mobile-quick>div,.large .mobile-education .ad-direction-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media screen and (max-width:350px){.mobile-welcome img{display:none}.mobile-quick a{padding:8px 6px;gap:6px}.mobile-quick b{font-size:12px}}

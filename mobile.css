@@ -106,3 +106,6 @@ body.mobile-shell{display:block;min-width:0;width:100%;padding-bottom:calc(76px 
 @media print{.mobile-nav,.mobile-more{display:none!important}}
 
 @media screen and (max-width:760px){.mobile-shell .mobile-cell-value{min-width:0;max-width:100%;overflow-wrap:anywhere}.mobile-shell .mobile-cell-value .actions{margin:4px 0;gap:6px}.mobile-shell .mobile-cell-value .actions button{flex:1 1 100%}.mobile-shell .mobile-cell-value a{overflow-wrap:anywhere}.mobile-shell .mobile-cell-value select{width:100%}.mobile-shell .mobile-cell-value small{display:block}.mobile-shell .mobile-more-panel{overscroll-behavior:contain}.mobile-shell .mobile-more-panel a{font-weight:600}.mobile-shell .ws-cabinet-actions .ws-profile-select{min-width:0}.mobile-shell .ws-role-nav a:last-child{width:auto}.mobile-shell .mobile-nav{max-width:none;margin:0}.mobile-shell .mobile-nav button:focus-visible{outline-offset:-3px}}
+
+.mobile-cell-value{display:contents}
+@media screen and (max-width:760px){.mobile-shell .mobile-cell-value{display:block}.large .mobile-shell .choices button,.large .mobile-shell .life-option{font-size:1rem}.large .mobile-shell h1{font-size:1.7rem}.large .mobile-shell h2{font-size:1.3rem}.large .mobile-shell .mobile-nav a,.large .mobile-shell .mobile-nav button{font-size:11px}}

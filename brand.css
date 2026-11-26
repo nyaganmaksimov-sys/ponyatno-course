@@ -1,0 +1,12 @@
+.brand-foxes{display:inline-flex!important;align-items:center;gap:12px;text-decoration:none;min-width:0;white-space:normal!important;letter-spacing:-.4px!important;flex-shrink:0}
+.brand-foxes .brand-logo{display:block;width:82px;height:64px;object-fit:contain;flex-shrink:0;background:white;border-radius:7px}
+.brand-foxes>strong{display:flex;flex-direction:column;gap:6px;font-family:"Segoe UI",Arial,sans-serif;font-size:22px;font-weight:750;line-height:1.15;letter-spacing:-.5px;color:#b95c00;white-space:nowrap}
+.brand-foxes>strong>small{display:block;font-size:12px;font-weight:500;line-height:1.35;letter-spacing:0;color:#52667e;white-space:normal;max-width:210px}
+.ws-hero-logo{display:grid;place-items:center;padding:18px;border-radius:18px;border:1px solid #dce5f1;background:white;align-self:center}
+.ws-hero-logo img{display:block;width:100%;max-width:360px;height:auto}
+aside .brand-foxes{gap:8px;max-width:100%}
+aside .brand-foxes .brand-logo{width:52px;height:42px}
+aside .brand-foxes>strong{font-size:17px;white-space:normal;min-width:0}
+aside .brand-foxes>strong>small{font-size:12px;max-width:145px}
+@media(max-width:600px){.brand-foxes{gap:9px}.brand-foxes .brand-logo{width:62px;height:49px}.brand-foxes>strong{font-size:19px}.brand-foxes>strong>small{font-size:12px;max-width:175px}.ws-hero-logo{max-width:320px;margin:auto}}
+@media print{.brand-foxes .brand-logo{print-color-adjust:exact}.brand-foxes>strong{color:#b95c00}}

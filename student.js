@@ -17,7 +17,7 @@ function model(state,lifeState){
  return {completed,practiced,passed,doneLife,path,selected,count,next,stage};
 }
 function render(state,storageOK){
- document.title='Мой кабинет — Понятно';
+ document.title='Мой кабинет — Умные Лисята';
  let raw=[],ok=storageOK;
  try{raw=JSON.parse(localStorage.getItem('ponyatno-life-v1')||'[]');}catch{ok=false;}
  const m=model(state,raw), total=m.selected.length;

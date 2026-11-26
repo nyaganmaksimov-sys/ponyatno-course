@@ -13,7 +13,7 @@ function save(){try{localStorage.setItem(key,JSON.stringify(state));storageOK=tr
 function title(id){return lessons.find(l=>l.id===id)?.title||'Занятие';}
 function stats(g){let present=0,absent=0,excused=0;for(const s of g.sessions)for(const m of g.members){const v=s.marks[m];if(v==='present')present++;if(v==='absent')absent++;if(v==='excused')excused++;}return {present,absent,excused,unknown:g.members.length*g.sessions.length-present-absent-excused};}
 function render(){
-document.title='Кабинет преподавателя — Понятно';
+document.title='Кабинет преподавателя — Умные Лисята';
 const g=group();if(g)state.active=g.id;
 const sessions=g?[...g.sessions].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)):[];
 const s=sessions.find(x=>x.id===selectedSession)||sessions[0];selectedSession=s?.id||'';

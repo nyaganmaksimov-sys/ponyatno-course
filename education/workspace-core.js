@@ -65,7 +65,7 @@
         if (!s || s.version !== 1 || !['learners', 'groups', 'sessions', 'assignments', 'marks', 'drafts', 'events'].every(k => Array.isArray(s[k]) && s[k].length <= 2000)) return false;
         const defaults = seed();
         if (!defaults.learners.every(l => s.learners.some(x => x?.id === l.id)) || !defaults.groups.every(g => s.groups.some(x => x?.id === g.id))) return false;
-        if (!s.learners.every(l => l && typeof l.id === 'string' && typeof l.name === 'string' && s.groups.some(g => g.id === l.groupId))) return false;
+        if (!s.learners.every(l => l && typeof l.id === 'string' && typeof l.name === 'string' && s.groups.some(g => g.id === l.groupId) && (l.groupIds === undefined || Array.isArray(l.groupIds) && l.groupIds.every(id => s.groups.some(g => g.id === id))) && (!l.guardianId || s.learners.some(p => p.id === l.guardianId)))) return false;
         if (!s.groups.every(g => g && typeof g.id === 'string' && typeof g.name === 'string')) return false;
         if (!s.drafts.every(c => c && typeof c.id === 'string' && typeof c.title === 'string' && Array.isArray(c.lessons) && c.lessons.every(l => l && typeof l.id === 'string') && (!c.published || Array.isArray(c.published.lessons)))) return false;
         if (!s.sessions.every(m => m && typeof m.id === 'string' && validDate(m.date) && Number.isFinite(timeMinutes(m.time)) && typeof m.title === 'string' && Number.isInteger(m.minutes) && m.minutes >= 5 && m.minutes <= 240 && s.groups.some(g => g.id === m.groupId) && (m.status === undefined || ['planned', 'completed', 'cancelled'].includes(m.status)) && m.attendance && Object.values(m.attendance).every(v => ['present', 'absent', 'excused'].includes(v)))) return false;
@@ -78,6 +78,11 @@
     }
     const learner = (s, id) => s.learners.find(l => l.id === id);
     const group = (s, id) => s.groups.find(g => g.id === id);
+    const groupIds = (s, id) => { const p = learner(s, id); return p ? [...new Set([p.groupId, ...(p.groupIds || [])].filter(Boolean))] : []; };
+    const isMember = (s, id, groupId) => groupIds(s, id).includes(groupId);
+    const members = (s, groupId) => s.learners.filter(p => isMember(s, p.id, groupId));
+    const guardianId = (s, id) => learner(s, id)?.guardianId || (id === 'child' ? 'parent' : '');
+    const childrenOf = (s, id) => s.learners.filter(p => guardianId(s, p.id) === id);
     const meetingInfo = (s, m) => ({ ...m, status: m.status || 'planned', teacher: m.teacher || group(s, m.groupId)?.teacher, room: m.room || group(s, m.groupId)?.room, agenda: m.agenda || '', home: m.home || '', cancelReason: m.cancelReason || '' });
     function upgrade(s) {
       const updated = clone(s);
@@ -110,7 +115,7 @@
       const g = group(s, groupId), c = available(s).find(c => c.id === courseId);
       requireValue(g && c && g.audience === c.group, 'Выбери курс для возраста этой группы.');
       requireValue(validDate(due) && due >= date(), 'Укажи срок сегодня или позднее.');
-      const people = s.learners.filter(l => l.groupId === groupId && !assigned(s, l.id).some(a => a.courseId === courseId));
+      const people = members(s, groupId).filter(l => !assigned(s, l.id).some(a => a.courseId === courseId));
       requireValue(people.length, 'Этот курс уже назначен всем участникам группы.');
       for (const l of people) s.assignments.push({ id: uid('assignment'), learnerId: l.id, courseId, due, note: text(note, 500), ...(c.custom ? { snapshot: clone(c) } : {}) });
       log(s, 'Группе «' + g.name + '» назначен курс «' + c.title + '».');
@@ -118,7 +123,7 @@
     }
     function attendance(s, sessionId, learnerId, value) {
       const meeting = s.sessions.find(m => m.id === sessionId);
-      requireValue(meeting && meeting.status !== 'cancelled' && learner(s, learnerId)?.groupId === meeting.groupId && ['', 'present', 'absent', 'excused'].includes(value), 'Не удалось изменить посещаемость: проверь участника и статус встречи.');
+      requireValue(meeting && meeting.status !== 'cancelled' && isMember(s, learnerId, meeting.groupId) && ['', 'present', 'absent', 'excused'].includes(value), 'Не удалось изменить посещаемость: проверь участника и статус встречи.');
       if (value) meeting.attendance[learnerId] = value;
       else delete meeting.attendance[learnerId];
     }
@@ -127,18 +132,19 @@
       for (const original of s.sessions) {
         const m = meetingInfo(s, original), other = timeMinutes(m.time);
         if (m.id === excludeId || m.status === 'cancelled' || m.date !== candidate.date || start >= other + m.minutes || other >= end) continue;
-        const reason = m.groupId === candidate.groupId ? 'У группы уже есть встреча' : m.teacher === candidate.teacher ? 'Преподаватель занят' : candidate.room !== 'Онлайн' && m.room === candidate.room ? 'Кабинет занят' : '';
+        const reason = m.groupId === candidate.groupId ? 'У группы уже есть встреча' : m.teacher === candidate.teacher ? 'Преподаватель занят' : candidate.room !== 'Онлайн' && m.room === candidate.room ? 'Кабинет занят' : members(s, candidate.groupId).some(p => isMember(s, p.id, m.groupId)) ? 'Участник занят в другой группе' : '';
         if (reason) return `${reason}: «${m.title}», ${m.time} (${group(s, m.groupId).name}). Выбери другое время или ресурс.`;
       }
       return '';
     }
     function notifyMeeting(s, groupIds, meeting, message) {
       s.notices ||= [];
-      const people = s.learners.filter(p => groupIds.includes(p.groupId));
+      const people = s.learners.filter(p => groupIds.some(id => isMember(s, p.id, id)));
       const at = new Date().toISOString();
       for (const p of people) {
         s.notices.unshift({ id: uid('notice'), learnerId: p.id, relatedLearnerId: p.id, groupId: meeting.groupId, sessionId: meeting.id, message, at, readAt: '' });
-        if (p.id === 'child') s.notices.unshift({ id: uid('notice'), learnerId: 'parent', relatedLearnerId: 'child', groupId: meeting.groupId, sessionId: meeting.id, message: 'Для Саши: ' + message, at, readAt: '' });
+        const guardian = guardianId(s, p.id);
+        if (guardian && learner(s, guardian)) s.notices.unshift({ id: uid('notice'), learnerId: guardian, relatedLearnerId: p.id, groupId: meeting.groupId, sessionId: meeting.id, message: 'Для участника «' + p.name + '»: ' + message, at, readAt: '' });
       }
       s.notices = s.notices.slice(0, 500);
     }
@@ -251,7 +257,7 @@
       return result;
     };
     function programStats(s, groupIds) {
-      const people = s.learners.filter(l => groupIds.includes(l.groupId));
+      const people = s.learners.filter(l => groupIds.some(id => isMember(s, l.id, id)));
       const list = s.sessions.filter(m => groupIds.includes(m.groupId));
       const result = { participants: people.length, planned: 0, completed: 0, cancelled: 0, present: 0, absent: 0, excused: 0, minutes: 0, done: 0, total: 0 };
       for (const m of list) {
@@ -262,7 +268,7 @@
       for (const p of people) { const n = progress(s, p.id); result.done += n.done; result.total += n.total; }
       return result;
     }
-    return { seed, valid, upgrade, learner, group, native, available, course, assigned, isDone, progress, complete, assign, attendance, createDraft, editDraft, saveLesson, moveLesson, publish, study, stats, date, clone, validDate, shiftDate, weekStart, meetingInfo, collision, saveMeeting, cancelMeeting, restoreMeeting, finishMeeting, notices, readNotice, programStats };
+    return { seed, valid, upgrade, learner, group, groupIds, isMember, members, guardianId, childrenOf, native, available, course, assigned, isDone, progress, complete, assign, attendance, createDraft, editDraft, saveLesson, moveLesson, publish, study, stats, date, clone, validDate, shiftDate, weekStart, meetingInfo, collision, saveMeeting, cancelMeeting, restoreMeeting, finishMeeting, notices, readNotice, programStats, log };
   }
   window.EducationWorkspaceCore = { create };
 })();

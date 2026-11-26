@@ -1,0 +1,106 @@
+/* Mobile app shell — loaded last, desktop and print unchanged. */
+.mobile-nav,.mobile-more{display:none}
+@media screen and (max-width:760px){
+html{max-width:100%;scroll-padding-top:78px}
+body.mobile-shell{display:block;min-width:0;width:100%;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+.mobile-shell main,.mobile-shell footer,.mobile-shell .workspace{width:100%;min-width:0;max-width:100%}
+.mobile-shell main{padding:16px 14px 24px;overflow-wrap:anywhere}
+.mobile-shell footer{padding:20px 16px}
+.mobile-shell header,.mobile-shell .site-header{position:sticky;top:0;z-index:20;background:white;border-bottom:1px solid #dce5f1;min-height:60px;padding:8px 14px;gap:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;box-shadow:0 2px 9px #17365e0a}
+.mobile-shell .header-inner{padding:0;gap:8px;width:100%;display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between}
+.mobile-shell header nav,.mobile-shell .header-inner nav{display:none}
+.mobile-shell .brand-foxes{gap:6px;flex:1;min-width:0;max-width:calc(100% - 65px)}
+.mobile-shell .brand-foxes .brand-logo{width:45px;height:40px;max-width:45px}
+.mobile-shell .brand-foxes>strong{font-size:17px;line-height:1.15;white-space:normal;min-width:0;gap:0}
+.mobile-shell .brand-foxes>strong>small{display:none}
+.mobile-shell #font,.mobile-shell #font-toggle{font-size:13px;padding:8px;min-height:44px;min-width:44px;flex-shrink:0;white-space:nowrap;margin:0}
+.mobile-shell #font-toggle .font-label{display:none}
+.mobile-shell h1{font-size:clamp(26px,7vw,34px);line-height:1.18;letter-spacing:-.6px}
+.mobile-shell h2{font-size:21px;line-height:1.3}
+.mobile-shell h3{font-size:17px;line-height:1.35}
+.mobile-shell .hero,.mobile-shell .ws-demo-hero{grid-template-columns:minmax(0,1fr);padding:22px 18px;border-radius:17px;margin:0 0 20px;gap:16px}
+.mobile-shell .ws-demo-hero h1{font-size:clamp(28px,7.2vw,36px);line-height:1.12;margin:12px 0}
+.mobile-shell .ws-hero-logo{display:none}
+.mobile-shell .hero-copy h1{font-size:clamp(28px,7.2vw,36px)}
+.mobile-shell .hero-inner{grid-template-columns:minmax(0,1fr)}
+.mobile-shell .hero-art{display:none}
+.mobile-shell .card,.mobile-shell .panel{min-width:0;padding:16px;border-radius:14px}
+.mobile-shell .grid,.mobile-shell .ws-program-grid,.mobile-shell .ad-direction-grid,.mobile-shell .ad-group-grid,.mobile-shell .ws-assignment-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+.mobile-shell .grid>* ,.mobile-shell .ws-program-grid>*{min-width:0}
+.mobile-shell .dashboard-metrics,.mobile-shell .demo-metrics,.mobile-shell .ws-metrics,.mobile-shell .ws-inline-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mobile-shell .ws-metric{padding:14px;min-width:0}
+.mobile-shell .ws-metric strong,.mobile-shell .card strong.demo-number{font-size:26px}
+.mobile-shell .ws-metric>span{font-size:14px;overflow-wrap:anywhere}
+.mobile-shell .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mobile-shell .quick-card{padding:14px;min-height:125px;min-width:0}
+.mobile-shell .quick-card strong{font-size:14px;line-height:1.3}
+.mobile-shell .quick-card small{font-size:12px;line-height:1.4}
+.mobile-shell .quick-arrow{right:10px;top:12px}
+.mobile-shell .quick-icon{width:40px;height:40px}
+.mobile-shell .actions,.mobile-shell .hero-actions,.mobile-shell .banner-actions{display:flex;flex-wrap:wrap;gap:9px;max-width:100%;min-width:0}
+.mobile-shell .actions>.btn,.mobile-shell .actions>button,.mobile-shell .hero-actions>.btn{flex:1 1 140px;white-space:normal;width:auto;max-width:100%;text-align:center}
+.mobile-shell button,.mobile-shell .btn{min-height:44px;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+.mobile-shell input:not([type=checkbox]):not([type=radio]),.mobile-shell select,.mobile-shell textarea{font-size:16px;max-width:100%;min-width:0;min-height:46px}
+.mobile-shell form,.mobile-shell .ws-form-row,.mobile-shell .ws-form-row.two,.mobile-shell .ad-apply-layout,.mobile-shell .ad-detail-layout,.mobile-shell .ws-builder-layout,.mobile-shell .ws-meeting-editor{grid-template-columns:minmax(0,1fr);min-width:0}
+.mobile-shell form label,.mobile-shell .ws-calendar-filters>label,.mobile-shell .ws-profile-select,.mobile-shell .ws-group-select,.mobile-shell .ws-attendance-label{min-width:0;width:100%;max-width:100%}
+.mobile-shell .ws-heading{gap:12px;margin-bottom:18px}
+.mobile-shell .ws-heading>*,.mobile-shell .ws-cabinet-actions{max-width:100%;width:100%;min-width:0}
+.mobile-shell .ws-role-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:5px;margin-bottom:18px}
+.mobile-shell .ws-role-nav a{white-space:normal;min-width:0;min-height:44px;font-size:13px;padding:8px 5px;line-height:1.25;gap:5px}
+.mobile-shell .ws-role-nav svg{width:18px;height:18px}
+.mobile-shell .ws-week-scroll{overflow:visible;padding:0}
+.mobile-shell .ws-week-board{grid-template-columns:minmax(0,1fr);min-height:0;gap:10px}
+.mobile-shell .ws-week-day{padding:12px}
+.mobile-shell .ws-week-day>h3{flex-direction:row;align-items:center;flex-wrap:wrap;gap:8px}
+.mobile-shell .ws-calendar-event{padding:12px 14px}
+.mobile-shell .ws-calendar-event>h4{font-size:16px}
+.mobile-shell .ws-calendar-event>p,.mobile-shell .ws-calendar-event>small{font-size:14px}
+.mobile-shell .ws-calendar-metrics .ws-metric{display:flex;flex-direction:column;align-items:flex-start}
+.mobile-shell .ws-walk-card{padding:14px;gap:10px;min-width:0}
+.mobile-shell .ws-walk-card>div{min-width:0}
+.mobile-shell .ws-notification-preview{padding:14px;gap:10px}
+.mobile-shell .ws-profile-line{gap:12px}
+.mobile-shell .ws-progress-head{gap:8px;flex-wrap:wrap}
+.mobile-shell .lesson,.mobile-shell .life-exercise{width:100%;max-width:100%;padding-left:0;padding-right:0}
+.mobile-shell .choices button,.mobile-shell .life-option{min-height:54px;padding:14px;font-size:16px;text-align:left;line-height:1.45}
+.mobile-shell .sim-screen{padding:18px;font-size:20px}
+.mobile-shell .visual-row{padding:12px;gap:5px}
+.mobile-shell .visual-row svg,.mobile-shell .unknown-shape{width:43px;height:43px}
+.mobile-shell img,.mobile-shell video{max-width:100%;height:auto}
+.mobile-shell svg{max-width:100%}
+.mobile-shell .table-wrap,.mobile-shell .ws-table-wrap,.mobile-shell .tw-table-wrap{max-width:100%;min-width:0;overflow:auto}
+.mobile-shell table.mobile-card-table{display:block;white-space:normal;width:100%;border:0;min-width:0}
+.mobile-shell table.mobile-card-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.mobile-shell table.mobile-card-table tbody{display:grid;gap:10px;width:100%}
+.mobile-shell table.mobile-card-table tr{display:block;border:1px solid #dce5f1;border-radius:12px;padding:8px 12px;background:white}
+.mobile-shell table.mobile-card-table td{display:grid;grid-template-columns:minmax(85px,36%) minmax(0,1fr);gap:8px;align-items:start;text-align:left!important;min-width:0!important;max-width:100%;width:auto;padding:9px 0;border-bottom:1px solid #edf1f7;white-space:normal;overflow-wrap:anywhere;font-size:14px}
+.mobile-shell table.mobile-card-table td:last-child{border-bottom:0}
+.mobile-shell table.mobile-card-table td::before{content:attr(data-mobile-label);color:#52667e;font-weight:600;font-size:12px;line-height:1.5}
+.mobile-shell table.mobile-card-table td>*{min-width:0;max-width:100%}
+.mobile-shell table.mobile-card-table td form{grid-template-columns:minmax(0,1fr)}
+.mobile-shell table.mobile-card-table td button{min-height:44px}
+.mobile-shell .ws-table-progress{min-width:0;max-width:100%}
+.mobile-shell .mobile-nav{position:fixed;z-index:40;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:#fff;border-top:1px solid #dce5f1;padding:5px 3px calc(5px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px #17365e12;gap:2px}
+.mobile-shell .mobile-nav a,.mobile-shell .mobile-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:57px;border:0;border-radius:11px;padding:5px 2px;color:#52667e;text-decoration:none;background:transparent;font-size:10px;font-weight:650;line-height:1.15;text-align:center;overflow-wrap:normal}
+.mobile-shell .mobile-nav svg{width:22px;height:22px;flex:none}
+.mobile-shell .mobile-nav [aria-current=page],.mobile-shell .mobile-nav [aria-expanded=true]{color:#2459d6;background:#eaf1ff}
+.mobile-shell .mobile-more{position:fixed;z-index:39;inset:0;background:#142b4966;display:flex;align-items:flex-end;justify-content:center;padding:12px 12px calc(75px + env(safe-area-inset-bottom,0px))}
+.mobile-shell .mobile-more[hidden]{display:none!important}
+.mobile-shell .mobile-more-panel{width:100%;max-height:calc(100dvh - 100px);overflow:auto;background:white;border-radius:20px;padding:16px;box-shadow:0 8px 40px #182b4533}
+.mobile-shell .mobile-more-panel h2{margin:0 0 10px}
+.mobile-shell .mobile-more-panel a{display:flex;align-items:center;min-height:46px;padding:10px 8px;border-bottom:1px solid #e9eef5;color:#203a5c;text-decoration:none;font-size:16px}
+.mobile-shell .mobile-more-panel button{width:100%;margin-top:10px}
+.mobile-shell .ws-toast,.mobile-shell #toast{bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:55}
+.mobile-hub aside{display:none!important}
+.mobile-hub #menu{display:none!important}
+.mobile-hub header{position:sticky;top:0}
+.mobile-hub #crumb{flex:1;font-size:14px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}
+.mobile-hub .header-action{display:inline-flex!important;padding:8px 10px;font-size:13px;min-height:44px}
+.mobile-hub .demo{display:none}
+.mobile-hub .table-wrap{border:0}
+.mobile-hub .section-title span{font-size:12px}
+.mobile-hub .mobile-org{display:grid;gap:5px;margin-bottom:12px;font-size:13px}
+.mobile-hub .mobile-org select{width:100%}
+}
+@media screen and (max-width:350px){.mobile-shell main{padding-left:10px;padding-right:10px}.mobile-shell .card,.mobile-shell .panel{padding:13px}.mobile-shell .mobile-nav a,.mobile-shell .mobile-nav button{font-size:9px}.mobile-shell .brand-foxes>strong{font-size:15px}.mobile-shell .quick-card{padding:10px}.mobile-shell .mobile-nav svg{width:20px;height:20px}}
+@media print{.mobile-nav,.mobile-more{display:none!important}}

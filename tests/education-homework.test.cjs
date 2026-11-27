@@ -205,7 +205,7 @@ test('homework cards render for catalog lessons, studio tasks and scheduled meet
 test('first direct homework visit persists task IDs before interaction and survives reload', () => {
   const vm = require('node:vm'), fs = require('node:fs'), path = require('node:path');
   const stored = new Map();
-  const scripts = ['../data.js', '../education/catalog.js', '../education/organization.js', '../education/workspace-core.js', '../education/admission-core.js', '../education/admission.js', '../education/schedule.js', '../education/homework-core.js', '../education/homework.js', '../education/workspace.js'];
+  const scripts = ['../data.js', '../education/catalog.js', '../education/organization.js', '../education/workspace-core.js', '../education/admission-core.js', '../education/admission.js', '../education/schedule.js', '../education/homework-core.js', '../education/homework.js', '../education/showcase-data.js', '../education/showcase-core.js', '../education/showcase.js', '../education/workspace.js'];
   const boot = () => {
     const context = vm.createContext({ window: { addEventListener() {} }, document: { addEventListener() {} }, localStorage: { getItem: k => stored.get(k) || null, setItem: (k, v) => stored.set(k, v) } });
     for (const name of scripts) vm.runInContext(fs.readFileSync(path.join(__dirname, name), 'utf8'), context);

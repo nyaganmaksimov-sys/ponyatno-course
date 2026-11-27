@@ -51,6 +51,7 @@
         if (!s.groups.every(g => Number.isInteger(g.capacity) && g.capacity >= 1 && g.capacity <= 40 && typeof g.open === 'boolean' && program(groupProgram(s, g)))) return false;
         const list = s.admission.applications;
         if (new Set(list.map(a => a.id)).size !== list.length || new Set(list.map(a => a.sequence)).size !== list.length) return false;
+        if (!list.every(a => a && (a.source === undefined || a.source === 'public-site' && typeof a.contactName === 'string' && a.contactName.length >= 2 && a.contactName.length <= 80 && typeof a.contact === 'string' && a.contact.length >= 3 && a.contact.length <= 100))) return false;
         return list.every(a => a && typeof a.id === 'string' && Number.isInteger(a.sequence) && a.sequence > 0 && typeof a.name === 'string' && program(a.programId) && allowed(a.programId).includes(a.audience) && Object.hasOwn(statuses, a.status) && Number.isFinite(Date.parse(a.createdAt)) && C.validDate(a.followUp) && Array.isArray(a.history) && (!a.learnerId || C.learner(s, a.learnerId)) && (!a.guardianId || C.learner(s, a.guardianId)) && (!a.preferredGroupId || C.group(s, a.preferredGroupId)) && (!a.groupId || C.group(s, a.groupId)) && (a.status !== 'enrolled' || a.learnerId && a.groupId && C.isMember(s, a.learnerId, a.groupId)));
       } catch { return false; }
     }
@@ -84,13 +85,26 @@
       check(!gid || g && groupProgram(s, g) === pid && g.audience === aid && g.open !== false, 'Выбери открытую группу для этого направления.');
       check(!existing || !gid || !C.isMember(s, existing.id, gid), 'Участник уже зачислен в эту группу. Открой его кабинет или выбери другую группу.');
       const guardian = existing ? C.guardianId(s, existing.id) : isMinor(aid) ? values.guardianId : '';
-      check(!isMinor(aid) || C.learner(s, guardian) && !isMinor(audience(s, C.learner(s, guardian))), 'Для детского профиля выбери сопровождающего взрослого.');
+      const publicSite = values.source === 'public-site';
+      const contactName = clean(values.contactName, 80), contact = clean(values.contact, 100);
+      check(!publicSite || !existing && contactName.length >= 2 && contact.length >= 3, 'Для заявки с сайта укажи учебное контактное лицо и способ связи.');
+      check(!isMinor(aid) || C.learner(s, guardian) && !isMinor(audience(s, C.learner(s, guardian))) || publicSite && !guardian, 'Для детского профиля выбери сопровождающего взрослого.');
       const duplicate = s.admission.applications.find(a => activeStatuses.includes(a.status) && a.programId === pid && a.audience === aid && (existing ? a.learnerId === existing.id : !a.learnerId && a.name.toLocaleLowerCase('ru-RU') === name.toLocaleLowerCase('ru-RU')));
       check(!duplicate, duplicate ? 'Для этого участника уже есть заявка ' + number(duplicate) + '. Открой «Мои заявки».' : 'Заявка уже существует.');
       const now = new Date().toISOString(), sequence = Math.max(0, ...s.admission.applications.map(a => a.sequence)) + 1;
       const a = { id: uid('application'), sequence, token: token || uid('submission'), name, audience: aid, programId: pid, preferredGroupId: gid, groupId: '', learnerId: existing?.id || '', guardianId: guardian || '', note: clean(values.note), status: 'new', owner: 'Координатор 01', followUp: C.date(2), decision: '', createdAt: now, updatedAt: now, history: [{ status: 'new', at: now, message: 'Учебная заявка получена.' }] };
+      if (publicSite) Object.assign(a, { source: 'public-site', contactName, contact });
       s.admission.applications.push(a);
       C.log(s, number(a) + ': получена заявка в программу «' + program(pid).title + '».');
+      return a;
+    }
+    function linkGuardian(s, id, guardianId) {
+      const a = get(s, id), p = C.learner(s, guardianId);
+      check(a?.source === 'public-site' && isMinor(a.audience) && ['new', 'review', 'waitlist'].includes(a.status), 'Связать сопровождающего можно для незавершённой детской заявки с сайта.');
+      check(p && !isMinor(audience(s, p)), 'Выбери взрослый учебный профиль сопровождающего.');
+      if (a.guardianId === guardianId) return a;
+      a.guardianId = guardianId;
+      record(s, a, a.status, 'Координатор связал заявку с учебным профилем сопровождающего «' + p.name + '».');
       return a;
     }
     function handling(s, id, values) {
@@ -123,6 +137,7 @@
       const a = get(s, id), g = C.group(s, groupId);
       check(a, 'Заявка не найдена.');
       if (a.status === 'enrolled') return { application: a, learner: C.learner(s, a.learnerId), enrolled: true, repeated: true };
+      check(a.source !== 'public-site' || !isMinor(a.audience) || C.learner(s, a.guardianId) && !isMinor(audience(s, C.learner(s, a.guardianId))), 'Перед зачислением ребёнка свяжи заявку с учебным профилем сопровождающего.');
       check(['new', 'review', 'waitlist'].includes(a.status) && g && groupProgram(s, g) === a.programId && g.audience === a.audience, 'Выбери подходящую группу для зачисления.');
       const existing = C.learner(s, a.learnerId), already = existing && C.isMember(s, existing.id, groupId);
       const error = enrollmentConflict(s, existing, groupId); check(!error, error);
@@ -176,7 +191,7 @@
     }
     const personApplications = (s, id) => s.admission.applications.filter(a => a.learnerId === id || a.guardianId === id).sort((a, b) => b.sequence - a.sequence);
     const stats = s => Object.fromEntries(Object.keys(statuses).map(status => [status, s.admission.applications.filter(a => a.status === status).length]));
-    return { upgrade, valid, program, programs, allowed, programGroups, groupProgram, groupStats, get, number, audience, isMinor, request, handling, wait, enroll, close, reopen, saveGroup, personApplications, stats, statuses, uid };
+    return { upgrade, valid, program, programs, allowed, programGroups, groupProgram, groupStats, get, number, audience, isMinor, request, linkGuardian, handling, wait, enroll, close, reopen, saveGroup, personApplications, stats, statuses, uid };
   }
   window.EducationAdmissionCore = { create };
 })();

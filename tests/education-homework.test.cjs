@@ -201,3 +201,21 @@ test('homework cards render for catalog lessons, studio tasks and scheduled meet
   assert.match(ui.meetingPanel(s.sessions[0].id, 'child'), /Домашняя практика/);
   assert.match(ui.directorPanel(), /Ожидают проверки/);
 });
+
+test('first direct homework visit persists task IDs before interaction and survives reload', () => {
+  const vm = require('node:vm'), fs = require('node:fs'), path = require('node:path');
+  const stored = new Map();
+  const scripts = ['../data.js', '../education/catalog.js', '../education/organization.js', '../education/workspace-core.js', '../education/admission-core.js', '../education/admission.js', '../education/schedule.js', '../education/homework-core.js', '../education/homework.js', '../education/workspace.js'];
+  const boot = () => {
+    const context = vm.createContext({ window: { addEventListener() {} }, document: { addEventListener() {} }, localStorage: { getItem: k => stored.get(k) || null, setItem: (k, v) => stored.set(k, v) } });
+    for (const name of scripts) vm.runInContext(fs.readFileSync(path.join(__dirname, name), 'utf8'), context);
+    return context;
+  };
+  const firstBoot = boot(), key = 'ponyatno-education-workspace-v1';
+  const initial = JSON.parse(stored.get(key)), id = initial.homework.tasks[0].id;
+  assert.match(firstBoot.window.EducationWorkspace.render('homework-task', id, 'child'), /Моя работа/);
+  const reloaded = boot(), restored = JSON.parse(stored.get(key));
+  assert.equal(restored.homework.tasks[0].id, id);
+  assert.deepEqual(restored.marks, initial.marks);
+  assert.match(reloaded.window.EducationWorkspace.render('homework-task', id, 'child'), /Моя работа/);
+});

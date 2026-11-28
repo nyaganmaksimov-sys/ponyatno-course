@@ -43,7 +43,7 @@
     digital: '<rect x="8" y="2" width="17" height="28" rx="4"/><path d="M13 6h7M15 26h3"/>'
   };
   const symbol = key => `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${drawings[key] || drawings.sun}</svg>`;
-  const sunSeal = '<svg viewBox="0 0 120 120" aria-hidden="true"><path fill="currentColor" d="m60 0 9 17 17-9 1 20 20-1-9 18 22 8-17 12 10 17-21 2 1 21-20-8-11 20-11-19-18 9-2-21-20 1 9-19L0 64l18-12L7 35l22-2-1-20 20 8Z"/><circle cx="45" cy="56" r="3" fill="#195b4b"/><circle cx="72" cy="56" r="3" fill="#195b4b"/><path d="M43 71q17 17 34-1" stroke="#195b4b" fill="none" stroke-width="3" stroke-linecap="round"/></svg>';
+  const sunSeal = '<svg viewBox="0 0 120 120" aria-hidden="true"><path fill="currentColor" d="m60 0 9 17 17-9 1 20 20-1-9 18 22 8-17 12 10 17-21 2 1 21-20-8-11 20-11-19-18 9-2-21-20 1 9-19L0 64l18-12L7 35l22-2-1-20 20 8Z"/><circle cx="45" cy="56" r="3" fill="#302a2a"/><circle cx="72" cy="56" r="3" fill="#302a2a"/><path d="M43 71q17 17 34-1" stroke="#302a2a" fill="none" stroke-width="3" stroke-linecap="round"/></svg>';
   const title = (label, heading, body = '') => `<div class="page-head"><span class="eyebrow">${esc(label)}</span><h1>${esc(heading)}</h1>${body ? `<p class="muted">${esc(body)}</p>` : ''}</div>`;
   function card(p) {
     return `<article class="card" data-category="${category(p)}"><div class="card-head"><span class="card-mark">${symbol(category(p))}</span><span class="card-category">${esc(categoryName(category(p)))}</span></div><h2>${esc(p.title)}</h2><p>${esc(description(p))}</p><p><span class="pill">${esc(publicAudience(p))}</span></p><a class="card-detail" href="#program/${p.id}">О занятии</a></article>`;
